@@ -3,8 +3,38 @@
 <head>
 	<meta charset="UTF-8">
 	<title>File Api</title>
+	<script></script>
+	<style>
+		#exampleTextarea { display: block; width: 99%; }
+		#exampleInputFile { display: none; }
+	</style>
 </head>
 <body>
-	
+	<button type="button" id="btnOpen">Open...</button>
+	<button type="button" id="btnSave">Save</button>
+	<textarea id="exampleTextarea" rows="8"></textarea>
+	<input type="file" id="exampleInputFile" accept=".txt,.csv,.xml">
 </body>
 </html>
+<script>
+	document.getElementById('btnOpen').onclick = function() {
+	  if ('FileReader' in window) {
+	    document.getElementById('exampleInputFile').click();
+	  } else {
+	    alert('Your browser does not support the HTML5 FileReader.');
+	  }
+	};
+
+	document.getElementById('exampleInputFile').onchange = function(event) {
+	  var fileToLoad = event.target.files[0];
+
+	  if (fileToLoad) {
+	    var reader = new FileReader();
+	    reader.onload = function(fileLoadedEvent) {
+	      var textFromFileLoaded = fileLoadedEvent.target.result;
+	      document.getElementById('exampleTextarea').value = textFromFileLoaded;
+	    };
+	    reader.readAsText(fileToLoad, 'UTF-8');
+	  }
+	};
+</script>
