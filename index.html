@@ -1,40 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>File Api</title>
-	<script></script>
-	<style>
-		#exampleTextarea { display: block; width: 99%; }
-		#exampleInputFile { display: none; }
-	</style>
+<meta charset=utf-8>
+<meta name="viewport" content="width=620">
+<title>File API</title>
+<link rel="stylesheet" href="fileapi.css">
 </head>
 <body>
-	<button type="button" id="btnOpen">Open...</button>
-	<button type="button" id="btnSave">Save</button>
-	<textarea id="exampleTextarea" rows="8"></textarea>
-	<input type="file" id="exampleInputFile" accept=".txt,.csv,.xml">
+<section id="wrapper">
+    <header>
+      <h1>File API</h1>
+    </header>
+<article id="dropBox">
+  <div id="holder">Text</div> 
+  <div id="holder2">Woordenboek</div>
+</article>
+<article id="text">
+    <textarea id="exampleTextarea" rows="10" cols="50"></textarea>
+    <div><button id="downloadBtn">Download</button></div>
+</article>
+<script>
+
+var holder = document.getElementById('holder');
+var text;
+var textSplit;
+var textResult = '';
+var dictionary;
+ 
+holder.ondragover = function () { this.className = 'hover'; return false; };
+holder.ondragend = function () { this.className = ''; return false; };
+holder.ondrop = function (e) {
+
+  this.className = '';
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+  	reader.onload = function (event) {
+    console.log(event.target);
+
+  text = event.target.result;
+  text = text.replace('\n', ' ');
+	document.getElementById('exampleTextarea').value = text;
+  textSplit = text.split(' ');
+  };
+  reader.readAsText(file, 'UTF-8');
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+
+val dictionaryArea = document.getElementById('holder2');
+
+var dictionaryArea = document.getElementById('dictionaryArea');
+ 
+dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };
+dictionaryArea.ondragend = function () { this.className = ''; return false; };
+dictionaryArea.ondrop = function (e) {
+
+  this.className = '';
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+    reader.onload = function (event) {
+    console.log(event.target);
+
+  dictionary = event.target.result;
+  //document.getElementById('exampleTextarea').value = dictionary;
+
+dictionary = dictionary.split(',');
+//document.getElementById('exampleTextarea').value = dictionary[1];
+
+textSplit.forEach(compare)
+
+function compare(item, index)
+{
+  console.log(item);
+  if (dictionary.includes(item))
+  {
+    textResult += item += ' ';
+  }
+  else
+  {
+    var fout = '[error]';
+    textResult += fout  += ' ';
+  }
+}
+
+document.getElementById('exampleTextarea').value = textResult;
+textResult='';
+
+  };
+  reader.readAsText(file, 'UTF-8');
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+
+//download button
+document.getElementById('downloadBtn').onclick = function() {
+  if ('Blob' in window) {
+    var fileName = 'Untitled.txt';
+    if (fileName) {
+      var textToWrite = document.getElementById('exampleTextarea').value.replace(/\n/g, '\r\n');
+      var textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
+
+      if ('msSaveOrOpenBlob' in navigator) {
+        navigator.msSaveOrOpenBlob(textFileAsBlob, fileName);
+      } else {
+        var downloadLink = document.createElement('a');
+        downloadLink.download = fileName;
+        downloadLink.innerHTML = 'Download File';
+        if ('webkitURL' in window) {
+          // Chrome allows the link to be clicked without actually adding it to the DOM.
+          downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        } else {
+          // Firefox requires the link to be added to the DOM before it can be clicked.
+          downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+          downloadLink.onclick = destroyClickedElement;
+          downloadLink.style.display = 'none';
+          document.body.appendChild(downloadLink);
+        }
+
+        downloadLink.click();
+      }
+    }
+  } else {
+    alert('Your browser does not support the HTML5 Blob.');
+  }
+};
+
+function destroyClickedElement(event) {
+  document.body.removeChild(event.target);
+}
+
+
+</script>
+</section>
 </body>
 </html>
-<script>
-	document.getElementById('btnOpen').onclick = function() {
-	  if ('FileReader' in window) {
-	    document.getElementById('exampleInputFile').click();
-	  } else {
-	    alert('Your browser does not support the HTML5 FileReader.');
-	  }
-	};
-
-	document.getElementById('exampleInputFile').onchange = function(event) {
-	  var fileToLoad = event.target.files[0];
-
-	  if (fileToLoad) {
-	    var reader = new FileReader();
-	    reader.onload = function(fileLoadedEvent) {
-	      var textFromFileLoaded = fileLoadedEvent.target.result;
-	      document.getElementById('exampleTextarea').value = textFromFileLoaded;
-	    };
-	    reader.readAsText(fileToLoad, 'UTF-8');
-	  }
-	};
-</script>

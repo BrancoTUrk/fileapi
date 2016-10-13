@@ -4,29 +4,23 @@
 <meta charset=utf-8>
 <meta name="viewport" content="width=620">
 <title>File API</title>
+<link rel="stylesheet" href="fileapi.css">
+</head>
 <body>
 <section id="wrapper">
     <header>
       <h1>File API</h1>
     </header>
-
-<style>
-#holder { border: 10px dashed #ccc; width: 200px; height: 200px;}
-#holder.hover { border: 10px dashed #333; }
-#dictionaryArea { border: 10px dashed #ccc; width: 200px; height: 200px; }
-#dictionaryArea.hover { border: 10px dashed #333; }
-</style>
-<article>
-<div>
-  <div id="holder" style="position: block;" ></div> 
-  <div id="dictionaryArea" style="position: block;" ></div> 
-</div>
-  <div><textarea id="exampleTextarea" rows="8"></textarea></div>
-  <div><button id="downloadBtn">Download</button></div>
+<article id="dropBox">
+  <div id="holder">Text</div> 
+  <div id="holder2">Woordenboek</div>
 </article>
+<article id="text">
+    <textarea id="exampleTextarea" rows="10" cols="50"></textarea>
+    <div><button id="downloadBtn">Download</button></div>
+</article>
+<script>
 
-
-<script>	//drag and drop script
 var holder = document.getElementById('holder');
 var text;
 var textSplit;
@@ -58,7 +52,7 @@ holder.ondrop = function (e) {
   return false;
 };
 
-var dictionaryArea = document.getElementById('dictionaryArea');
+var dictionaryArea = document.getElementById('holder2');
  
 dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };
 dictionaryArea.ondragend = function () { this.className = ''; return false; };
