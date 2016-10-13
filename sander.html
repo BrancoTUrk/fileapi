@@ -11,11 +11,16 @@
     </header>
 
 <style>
-#holder { border: 10px dashed #ccc; width: 200px; height: 200px; }
+#holder { border: 10px dashed #ccc; width: 200px; height: 200px;}
 #holder.hover { border: 10px dashed #333; }
+#dictionaryArea { border: 10px dashed #ccc; width: 200px; height: 200px; }
+#dictionaryArea.hover { border: 10px dashed #333; }
 </style>
 <article>
+<div>
   <div id="holder" style="position: block;" ></div> 
+  <div id="dictionaryArea" style="position: block;" ></div> 
+</div>
   <div><textarea id="exampleTextarea" rows="8"></textarea></div>
   <div><button id="downloadBtn">Download</button></div>
 </article>
@@ -23,6 +28,10 @@
 
 <script>	//drag and drop script
 var holder = document.getElementById('holder');
+var text;
+var textSplit;
+var textResult = '';
+var dictionary;
  
 holder.ondragover = function () { this.className = 'hover'; return false; };
 holder.ondragend = function () { this.className = ''; return false; };
@@ -36,7 +45,58 @@ holder.ondrop = function (e) {
   	reader.onload = function (event) {
     console.log(event.target);
 
-	document.getElementById('exampleTextarea').value = event.target.result;
+  text = event.target.result;
+  text = text.replace('\n', " ");
+  document.getElementById('exampleTextarea').value = text;
+  textSplit = text.split(' ');
+  //textSplit = textSplit.split(' ');
+  };
+  reader.readAsText(file, 'UTF-8');
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+
+var dictionaryArea = document.getElementById('dictionaryArea');
+ 
+dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };
+dictionaryArea.ondragend = function () { this.className = ''; return false; };
+dictionaryArea.ondrop = function (e) {
+
+  this.className = '';
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+    reader.onload = function (event) {
+    console.log(event.target);
+
+  dictionary = event.target.result;
+  //document.getElementById('exampleTextarea').value = dictionary;
+
+dictionary = dictionary.split(',');
+//document.getElementById('exampleTextarea').value = dictionary[1];
+
+textSplit.forEach(compare)
+
+function compare(item, index)
+{
+  console.log(item);
+  if (dictionary.includes(item))
+  {
+    textResult += item += ' ';
+  }
+  else
+  {
+    var fout = '[error]';
+    textResult += fout  += ' ';
+  }
+}
+
+document.getElementById('exampleTextarea').value = textResult;
+textResult='';
+
   };
   reader.readAsText(file, 'UTF-8');
   console.log(file);
