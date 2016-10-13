@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>File Api</title>
-	<script></script>
-	<style>
-		#exampleTextarea { display: block; width: 99%; }
-		#exampleInputFile { display: none; }
-	</style>
+<meta charset=utf-8>
+<meta name="viewport" content="width=620">
+<title>File API</title>
+<link rel="stylesheet" href="fileapi.css">
 </head>
 <body>
-	<button type="button" id="btnOpen">Open...</button>
-	<button type="button" id="btnSave">Save</button>
-	<textarea id="exampleTextarea" rows="8"></textarea>
-	<input type="file" id="exampleInputFile" accept=".txt,.csv,.xml">
+<section id="wrapper">
+    <header>
+      <h1>File API</h1>
+    </header>
+<article id="dropBox">
+  <div id="holder">Text</div> 
+  <div id="holder2">Woordenboek</div>
+</article>
+<article id="text">
+    <textarea id="exampleTextarea" rows="10" cols="50"></textarea>
+</article>
+<script>
+
+var holder = document.getElementById('holder');
+ 
+holder.ondragover = function () { this.className = 'hover'; return false; };
+holder.ondragend = function () { this.className = ''; return false; };
+holder.ondrop = function (e) {
+
+  this.className = '';
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+  	reader.onload = function (event) {
+    console.log(event.target);
+
+	document.getElementById('exampleTextarea').value = event.target.result;
+  };
+  reader.readAsText(file, 'UTF-8');
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+</script>
+</section>
 </body>
 </html>
-<script>
-	document.getElementById('btnOpen').onclick = function() {
-	  if ('FileReader' in window) {
-	    document.getElementById('exampleInputFile').click();
-	  } else {
-	    alert('Your browser does not support the HTML5 FileReader.');
-	  }
-	};
-
-	document.getElementById('exampleInputFile').onchange = function(event) {
-	  var fileToLoad = event.target.files[0];
-
-	  if (fileToLoad) {
-	    var reader = new FileReader();
-	    reader.onload = function(fileLoadedEvent) {
-	      var textFromFileLoaded = fileLoadedEvent.target.result;
-	      document.getElementById('exampleTextarea').value = textFromFileLoaded;
-	    };
-	    reader.readAsText(fileToLoad, 'UTF-8');
-	  }
-	};
-</script>
