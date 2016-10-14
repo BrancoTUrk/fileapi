@@ -25,10 +25,10 @@ article {
   	text-align: left;
 }
 #holder{
-	background-image: url(txt.svg);
+	background-image: url(../img/txt.svg);
 }
 #holder2 {
-	background-image: url(woordenboek.svg);
+	background-image: url(../img/woordenboek.svg);
 }
 #holder.hover, #holder2.hover { 
 	border: 10px dashed #333; 
