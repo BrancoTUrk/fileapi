@@ -19,6 +19,8 @@
 <article id="text">
     <textarea id="resultTextArea" rows="10" cols="50" disabled></textarea>
     <div><button id="downloadBtn">Download</button></div>
+    <input type="file" id="inputText" accept=".txt" hidden>
+    <input type="file" id="inputDict" accept=".csv" hidden>
 </article>
 
 <script>
@@ -31,6 +33,22 @@ var textSplit;
 var textResult = '';
 var dictionary;
  
+
+holder.onclick = function()                                                   // Upload by clicking
+{
+  if ('File' in window) {  
+    document.getElementById('inputText').click();                             // voer de input click uit
+  } else {
+    alert('Your browser does not support the HTML5 File.');
+  }
+}; 
+document.getElementById('inputText').onchange = function(event)                // als de inputText veranderd
+{
+  var file = event.target.files[0];                                            // Stop het geüploade bestand in File
+  uploadText(file);                                                            // Roep uploadText aan met File
+};
+
+
 holder.ondragover = function () { this.className = 'hover'; return false; };   // change class to change colour
 holder.ondragend = function () { this.className = ''; return false; };         // change class to return normal colour
 holder.ondrop = function (e) {                                                 // when the file is dropped onm the box
@@ -38,9 +56,15 @@ holder.ondrop = function (e) {                                                 /
   this.className = '';                                                         // change class to return normal colour
   e.preventDefault();                                                          // prevent browser from opening the file (default action)
 
-  var file = e.dataTransfer.files[0],                                          // grab the first file that was being held/dropped
-      reader = new FileReader();                                               // create a filereader for File or File
-    reader.onload = function (event) {                                         // create an event when a File is loaded
+  var file = e.dataTransfer.files[0];                                          // grab the first file that was being held/dropped
+  uploadText(file);      
+};
+
+
+function uploadText (file)
+{
+  reader = new FileReader();                                                   // create a filereader for File or File
+  reader.onload = function (event) {                                           // create an event when a File is loaded
     console.log(event.target);                                                 // output the name of the File 
 
     text = event.target.result;                                                // put the content of the File in variable 'text'
@@ -49,12 +73,27 @@ holder.ondrop = function (e) {                                                 /
     textSplit = text.split(' ');                                               // split text into the array textSplit on spaces
   };
   reader.readAsText(file, 'UTF-8');                                            // Make sure the file is read as plain text
-  console.log(file);                                                           // Output theinfo about the Fil
+  console.log(file);                                                           // Output the info about the File
 
   return false;
 };
 
 var dictArea = document.getElementById('holder2');                             // define the second area
+
+holder2.onclick = function()                                                   // Upload by clicking
+{
+  if ('File' in window) {  
+    document.getElementById('inputDict').click();                              // voer de input click uit
+  } else {
+    alert('Your browser does not support the HTML5 File.');
+  }
+}; 
+document.getElementById('inputDict').onchange = function(event)                // als de inputDict veranderd
+{
+  var file = event.target.files[0];                                            // Stop het geüploade bestand in File
+  uploadDict(file);                                                            // Roep uploadText aan met File
+};
+
  
 dictArea.ondragover = function () { this.className = 'hover'; return false; }; // change class to change colour
 dictArea.ondragend = function () { this.className = ''; return false; };       // change class to return normal colour
@@ -63,9 +102,15 @@ dictArea.ondrop = function (e) {                                               /
   this.className = '';                                                         // change class to return normal colour
   e.preventDefault();                                                          // prevent browser from opening the file (default action)
 
-  var file = e.dataTransfer.files[0],                                          // grab the first file that was being held/dropped
-      reader = new FileReader();                                               // create a filereader for File or File
-    reader.onload = function (event) {                                         // create an event when a File is loaded
+  var file = e.dataTransfer.files[0];                                          // grab the first file that was being held/dropped
+  uploadDict(file);                                                            // call function uploadDict
+      
+};
+
+function uploadDict (file)
+{
+  reader = new FileReader();                                                   // create a filereader for File or File
+  reader.onload = function (event) {                                           // create an event when a File is loaded
     console.log(event.target);                                                 // output the name of the File 
 
     dictionary = event.target.result;                                          // put the content of the File in variable 'dictionary'
