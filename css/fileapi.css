@@ -37,7 +37,7 @@ article.text {
 	width: 50%;
 	margin: 0 auto;
 }
-textarea#exampleTextarea {
+textarea#resultTextarea {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

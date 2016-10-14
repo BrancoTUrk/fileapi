@@ -4,134 +4,113 @@
 <meta charset=utf-8>
 <meta name="viewport" content="width=620">
 <title>File API</title>
-<link rel="stylesheet" href="css/fileapi.css">
+<link rel="stylesheet" href="css/fileapi.css"> <!-- Include style sheet -->
 </head>
 <body>
 <section id="wrapper">
     <header>
       <h1>File API</h1>
     </header>
-<article id="dropBox">
+<article id="dropBox"> <!-- create both boxes (holders) -->
   <div id="holder"></div> 
   <div id="holder2"></div>
 </article>
 <article id="text">
-    <textarea id="exampleTextarea" rows="10" cols="50" disabled></textarea>
+    <textarea id="resultTextArea" rows="10" cols="50" disabled></textarea>
     <div><button id="downloadBtn">Download</button></div>
 </article>
 
 <script>
 
+// Scripting for the first holder
+// First Holder is where the user drops a simple text file that get's displayed in the textarea 
 var holder = document.getElementById('holder');
 var text;
 var textSplit;
 var textResult = '';
 var dictionary;
  
-holder.ondragover = function () { this.className = 'hover'; return false; };
-holder.ondragend = function () { this.className = ''; return false; };
-holder.ondrop = function (e) {
+holder.ondragover = function () { this.className = 'hover'; return false; };   // change class to change colour
+holder.ondragend = function () { this.className = ''; return false; };         // change class to return normal colour
+holder.ondrop = function (e) {                                                 // when the file is dropped onm the box
 
-  this.className = '';
-  e.preventDefault();
+  this.className = '';                                                         // change class to return normal colour
+  e.preventDefault();                                                          // prevent browser from opening the file (default action)
 
-  var file = e.dataTransfer.files[0],
-      reader = new FileReader();
-    reader.onload = function (event) {
-    console.log(event.target);
+  var file = e.dataTransfer.files[0],                                          // grab the first file that was being held/dropped
+      reader = new FileReader();                                               // create a filereader for File or File
+    reader.onload = function (event) {                                         // create an event when a File is loaded
+    console.log(event.target);                                                 // output the name of the File 
 
-  text = event.target.result;
-  text = text.replace('\n', " ");
-  document.getElementById('exampleTextarea').value = text;
-  textSplit = text.split(' ');
-  //textSplit = textSplit.split(' ');
+    text = event.target.result;                                                // put the content of the File in variable 'text'
+    text = text.replace('\n', " ");                                            // replace enters with spaces
+    document.getElementById('resultTextArea').value = text;                   // put the content in the textarea
+    textSplit = text.split(' ');                                               // split text into the array textSplit on spaces
   };
-  reader.readAsText(file, 'UTF-8');
-  console.log(file);
-  reader.readAsDataURL(file);
+  reader.readAsText(file, 'UTF-8');                                            // Make sure the file is read as plain text
+  console.log(file);                                                           // Output theinfo about the Fil
 
   return false;
 };
 
-var dictionaryArea = document.getElementById('holder2');
+var dictionaryArea = document.getElementById('holder2');                       // define the second area
  
-dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };
-dictionaryArea.ondragend = function () { this.className = ''; return false; };
-dictionaryArea.ondrop = function (e) {
+dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };  // change class to change colour
+dictionaryArea.ondragend = function () { this.className = ''; return false; };        // change class to return normal colour
+dictionaryArea.ondrop = function (e) {                                         // when the file is dropped onm the box
 
-  this.className = '';
-  e.preventDefault();
+  this.className = '';                                                         // change class to return normal colour
+  e.preventDefault();                                                          // prevent browser from opening the file (default action)
 
-  var file = e.dataTransfer.files[0],
-      reader = new FileReader();
-    reader.onload = function (event) {
-    console.log(event.target);
+  var file = e.dataTransfer.files[0],                                          // grab the first file that was being held/dropped
+      reader = new FileReader();                                               // create a filereader for File or File
+    reader.onload = function (event) {                                         // create an event when a File is loaded
+    console.log(event.target);                                                 // output the name of the File 
 
-  dictionary = event.target.result;
-dictionary = dictionary.split(',');
+    dictionary = event.target.result;                                          // put the content of the File in variable 'dictionary'
+    dictionary = dictionary.split(',');                                        // split dictionary into an array on every comma
 
-textSplit.forEach(compare)
-function compare(item, index)
-{
-  console.log(item);
-  if (dictionary.includes(item))
-  {
-    textResult += item += ' ';
-  }
-  else
-  {
-    var fout = '[error]';
-    textResult += fout  += ' ';
-  }
-}
-
-document.getElementById('exampleTextarea').value = textResult;
-textResult='';
-
+    textSplit.forEach(compare)                                                 // compare on every element in the textSplit array
+    function compare(item, index)
+    {
+      console.log(item);                                                       // Output the current word
+      if (dictionary.includes(item))                                           // If the current word exists in the dictionary
+      {
+        textResult += item += ' ';                                             // Append the current word to textResult
+      }
+      else
+      {
+        var fout = '[error]';                                           
+        textResult += fout  += ' ';                                            // Append the text '[error]' instead of the current word
+      }
+    }
+    document.getElementById('resultTextArea').value = textResult;             // Display the textResult in the textArea
+    textResult='';                                                             // Clear the result
   };
-  reader.readAsText(file, 'UTF-8');
-  console.log(file);
-  reader.readAsDataURL(file);
+
+  reader.readAsText(file, 'UTF-8');                                            // Make sure the file is read as plain text
+  console.log(file);                                                           // Output theinfo about the Fil
 
   return false;
 };
 
 //download button
-document.getElementById('downloadBtn').onclick = function() {
-  if ('Blob' in window) {
-    var fileName = 'Untitled.txt';
-    if (fileName) {
-      var textToWrite = document.getElementById('exampleTextarea').value.replace(/\n/g, '\r\n');
-      var textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
+document.getElementById('downloadBtn').onclick = function() {                  // When the download button is clicked
+  if ('File' in window) {                                                      // If File API is supported
+    var fileName = 'untitled.txt';                                             // Default filename is untitled.txt                                                       
+    var textToWrite = document.getElementById('resultTextArea').value;         // TextToWrite is the text in the textArea
+    var textFileAsFile = new File([textToWrite], { type: 'text/plain' });      // Put text in the file to download
 
-      if ('msSaveOrOpenBlob' in navigator) {
-        navigator.msSaveOrOpenBlob(textFileAsBlob, fileName);
-      } else {
-        var downloadLink = document.createElement('a');
-        downloadLink.download = fileName;
-        downloadLink.innerHTML = 'Download File';
-        if ('webkitURL' in window) {
-          // Chrome allows the link to be clicked without actually adding it to the DOM.
-          downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-        } else {
-          // Firefox requires the link to be added to the DOM before it can be clicked.
-          downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-          downloadLink.onclick = destroyClickedElement;
-          downloadLink.style.display = 'none';
-          document.body.appendChild(downloadLink);
-        }
-
-        downloadLink.click();
-      }
-    }
+    var downloadLink = document.createElement('a');                            // creat a link
+    downloadLink.download = fileName;                                          // set the download
+    downloadLink.innerHTML = 'Download File';                                  // set innerHTML
+    downloadLink.href = window.URL.createObjectURL(textFileAsFile);            // link to the file to download
+    downloadLink.click();                                                      // click the created link
   } else {
-    alert('Your browser does not support the HTML5 Blob.');
+    alert('Your browser does not support the HTML5 File.');
   }
 };
 
-function destroyClickedElement(event) {
-  document.body.removeChild(event.target);
-}
 </script>
 
 
