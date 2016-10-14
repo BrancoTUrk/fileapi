@@ -4,14 +4,15 @@
 <meta charset=utf-8>
 <meta name="viewport" content="width=620">
 <title>File API</title>
-<link rel="stylesheet" href="css/fileapi.css"> <!-- Include style sheet -->
+<link rel="stylesheet" href="css/fileapi.css">                                 <!-- Include style sheet -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 </head>
 <body>
 <section id="wrapper">
     <header>
       <h1>File API</h1>
     </header>
-<article id="dropBox"> <!-- create both boxes (holders) -->
+<article id="dropBox">                                                         <!-- create both boxes (holders) -->
   <div id="holder"></div> 
   <div id="holder2"></div>
 </article>
@@ -44,7 +45,7 @@ holder.ondrop = function (e) {                                                 /
 
     text = event.target.result;                                                // put the content of the File in variable 'text'
     text = text.replace('\n', " ");                                            // replace enters with spaces
-    document.getElementById('resultTextArea').value = text;                   // put the content in the textarea
+    document.getElementById('resultTextArea').value = text;                    // put the content in the textarea
     textSplit = text.split(' ');                                               // split text into the array textSplit on spaces
   };
   reader.readAsText(file, 'UTF-8');                                            // Make sure the file is read as plain text
@@ -53,11 +54,11 @@ holder.ondrop = function (e) {                                                 /
   return false;
 };
 
-var dictionaryArea = document.getElementById('holder2');                       // define the second area
+var dictArea = document.getElementById('holder2');                             // define the second area
  
-dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };  // change class to change colour
-dictionaryArea.ondragend = function () { this.className = ''; return false; };        // change class to return normal colour
-dictionaryArea.ondrop = function (e) {                                         // when the file is dropped onm the box
+dictArea.ondragover = function () { this.className = 'hover'; return false; }; // change class to change colour
+dictArea.ondragend = function () { this.className = ''; return false; };       // change class to return normal colour
+dictArea.ondrop = function (e) {                                               // when the file is dropped onm the box
 
   this.className = '';                                                         // change class to return normal colour
   e.preventDefault();                                                          // prevent browser from opening the file (default action)
@@ -84,7 +85,7 @@ dictionaryArea.ondrop = function (e) {                                         /
         textResult += fout  += ' ';                                            // Append the text '[error]' instead of the current word
       }
     }
-    document.getElementById('resultTextArea').value = textResult;             // Display the textResult in the textArea
+    document.getElementById('resultTextArea').value = textResult;              // Display the textResult in the textArea
     textResult='';                                                             // Clear the result
   };
 
@@ -112,8 +113,6 @@ document.getElementById('downloadBtn').onclick = function() {                  /
 };
 
 </script>
-
-
 </section>
 </body>
 </html>
