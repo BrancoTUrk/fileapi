@@ -1,0 +1,50 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+}
+h1 {
+	font-size: 4em;
+}
+article {
+    position: relative;
+	z-index: 8888;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+}
+#holder, #holder2 {
+	border: 10px dashed #cccccc;
+	width: 200px;
+	height: 200px;
+  	display: inline-block;
+  	line-height: 200px;
+  	text-align: center;
+  	margin-right:15px;
+  	text-align: left;
+}
+#holder{
+	background-image: url(txt.svg);
+}
+#holder2 {
+	background-image: url(woordenboek.svg);
+}
+#holder.hover, #holder2.hover { 
+	border: 10px dashed #333; 
+}
+article.text {
+	width: 50%;
+	margin: 0 auto;
+}
+textarea#exampleTextarea {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
+	width: 600px;
+	height: 120px;
+	border: 3px solid #cccccc;
+	padding: 5px;
+	font-family: Tahoma, sans-serif;
+}
