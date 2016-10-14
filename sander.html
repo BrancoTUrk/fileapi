@@ -4,58 +4,140 @@
 <meta charset=utf-8>
 <meta name="viewport" content="width=620">
 <title>File API</title>
-<!-- <link rel="stylesheet" href="css/html5demos.css"> -->
-<!-- <script src="js/h5utils.js"></script></head> -->
+<link rel="stylesheet" href="fileapi.css">
+</head>
 <body>
 <section id="wrapper">
     <header>
       <h1>File API</h1>
     </header>
-
-<style>
-#holder { border: 10px dashed #ccc; width: 600px; height: 600px; margin: 20px auto;}
-#holder.hover { border: 10px dashed #333; }
-</style>
-<article>
+<article id="dropBox">
   <div id="holder"></div> 
+  <div id="holder2"></div>
+</article>
+<article id="text">
+    <textarea id="exampleTextarea" rows="10" cols="50"></textarea>
+    <div><button id="downloadBtn">Download</button></div>
 </article>
 <script>
+
 var holder = document.getElementById('holder');
+var text;
+var textSplit;
+var textResult = '';
+var dictionary;
  
 holder.ondragover = function () { this.className = 'hover'; return false; };
 holder.ondragend = function () { this.className = ''; return false; };
 holder.ondrop = function (e) {
+
   this.className = '';
   e.preventDefault();
 
   var file = e.dataTransfer.files[0],
       reader = new FileReader();
-  reader.onload = function (event) {
+  	reader.onload = function (event) {
     console.log(event.target);
-    holder.style.background = 'url(' + event.target.result + ') no-repeat center';
-    //holder = event.target.result;
+
+  text = event.target.result;
+  text = text.replace('\n', " ");
+  document.getElementById('exampleTextarea').value = text;
+  textSplit = text.split(' ');
+  //textSplit = textSplit.split(' ');
   };
+  reader.readAsText(file, 'UTF-8');
   console.log(file);
   reader.readAsDataURL(file);
 
   return false;
 };
-</script><!-- 
-<a id="html5badge" href="http://www.w3.org/html/logo/">
-<img src="http://www.w3.org/html/logo/badge/html5-badge-h-connectivity-device-graphics-multimedia-performance-semantics-storage.png" width="325" height="64" alt="HTML5 Powered with Connectivity / Realtime, Device Access, Graphics, 3D & Effects, Multimedia, Performance & Integration, Semantics, and Offline & Storage" title="HTML5 Powered with Connectivity / Realtime, Device Access, Graphics, 3D & Effects, Multimedia, Performance & Integration, Semantics, and Offline & Storage">
-</a> -->
-    <!-- <footer><a href="/">HTML5 demos</a>/<a id="built" href="http://twitter.com/rem">@rem built this</a>/<a href="#view-source">view source</a></footer>  -->
+
+var dictionaryArea = document.getElementById('holder2');
+ 
+dictionaryArea.ondragover = function () { this.className = 'hover'; return false; };
+dictionaryArea.ondragend = function () { this.className = ''; return false; };
+dictionaryArea.ondrop = function (e) {
+
+  this.className = '';
+  e.preventDefault();
+
+  var file = e.dataTransfer.files[0],
+      reader = new FileReader();
+    reader.onload = function (event) {
+    console.log(event.target);
+
+  dictionary = event.target.result;
+  //document.getElementById('exampleTextarea').value = dictionary;
+
+dictionary = dictionary.split(',');
+//document.getElementById('exampleTextarea').value = dictionary[1];
+
+textSplit.forEach(compare)
+
+function compare(item, index)
+{
+  console.log(item);
+  if (dictionary.includes(item))
+  {
+    textResult += item += ' ';
+  }
+  else
+  {
+    var fout = '[error]';
+    textResult += fout  += ' ';
+  }
+}
+
+document.getElementById('exampleTextarea').value = textResult;
+textResult='';
+
+  };
+  reader.readAsText(file, 'UTF-8');
+  console.log(file);
+  reader.readAsDataURL(file);
+
+  return false;
+};
+
+//download button
+document.getElementById('downloadBtn').onclick = function() {
+  if ('Blob' in window) {
+    var fileName = 'Untitled.txt';
+    if (fileName) {
+      var textToWrite = document.getElementById('exampleTextarea').value.replace(/\n/g, '\r\n');
+      var textFileAsBlob = new Blob([textToWrite], { type: 'text/plain' });
+
+      if ('msSaveOrOpenBlob' in navigator) {
+        navigator.msSaveOrOpenBlob(textFileAsBlob, fileName);
+      } else {
+        var downloadLink = document.createElement('a');
+        downloadLink.download = fileName;
+        downloadLink.innerHTML = 'Download File';
+        if ('webkitURL' in window) {
+          // Chrome allows the link to be clicked without actually adding it to the DOM.
+          downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        } else {
+          // Firefox requires the link to be added to the DOM before it can be clicked.
+          downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+          downloadLink.onclick = destroyClickedElement;
+          downloadLink.style.display = 'none';
+          document.body.appendChild(downloadLink);
+        }
+
+        downloadLink.click();
+      }
+    }
+  } else {
+    alert('Your browser does not support the HTML5 Blob.');
+  }
+};
+
+function destroyClickedElement(event) {
+  document.body.removeChild(event.target);
+}
+</script>
+
+
 </section>
-<!-- <a href="http://github.com/remy/html5demos"><img style="position: absolute; top: 0; left: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub" /></a> -->
-<!-- <script src="js/prettify.packed.js"></script> -->
-<!-- <script>
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script> -->
-<!-- <script>
-try {
-var pageTracker = _gat._getTracker("UA-1656750-18");
-pageTracker._trackPageview();
-} catch(err) {}</script> -->
 </body>
 </html>
